@@ -33,26 +33,34 @@ class transactions{
 
 class block_header{
     public:     // header
-        string prev_block_hash;
-        time_t timestamp;
-        string version;
-        string merkel_root_hash;
-        unsigned int nonce;
-        int difficulty_target;
+        int difficulty_target = 0;
+        string prev_block_hash = "";
+        time_t timestamp = 0;
+        string version = "";
+        string merkel_root_hash = "";
+        unsigned int nonce = 0;
         //--    // body
         vector<transactions> transactions;
         //--
         string block_hash;      // hash of this block
 };
 
+// BLOCKCHAINO CLASS GALIMA PADARYTI I BLOKU MASYVA, GAL BUTU LABIAU SIMPLE
+
+
+// class blockchain{
+//     public:
+        
+// }
+
 int random_num(int, int);
 
-vector<users> generate_users(int);
+vector<users> gen_users(int);
 
-vector<transactions> generate_transactions(int, vector<users>);
+vector<transactions> gen_transactions(int, vector<users>);
 
+block_header gen_block(int, int, vector<transactions> &, vector<block_header>);
 
-
-
+void print_bc_info(vector<block_header>);
 
 #endif
