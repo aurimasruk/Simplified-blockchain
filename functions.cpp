@@ -2,12 +2,12 @@
 
 int random_num(int x, int y){ return ((rand() % y) + x); }
 
-string merkle_root(vector<transactions> transaction){
+// string merkle_root(vector<transactions> transaction){
     
-}
+// }
 
 
-vector<users> generate_users(int size){
+vector<users> gen_users(int size){
     vector<users> vartotojai;
 
     for(int i = 0; i < size; i++){
@@ -21,7 +21,7 @@ vector<users> generate_users(int size){
 }
 
 
-vector<transactions> generate_transactions(int size, vector<users>users){
+vector<transactions> gen_transactions(int size, vector<users> users){
     vector<transactions> transakcijos;
 
     for(int i = 0; i < size; i++){
@@ -42,25 +42,30 @@ vector<transactions> generate_transactions(int size, vector<users>users){
     return transakcijos;
 }
 
-block_header gen_block(int difficulty, int nonce, vector<transactions> &transaction, vector<block_header> blockchain){
+block_header gen_block(int difficulty, int nonce, vector<transactions> &transaction){
     block_header block;
+
+    //for v0.1
+    string all_transactions = "";
 
     for(int i = 0; i < 100; i++){
         int transaction_id = random_num(0, transaction.size() - 1);
         block.transactions.push_back(transaction[transaction_id]);
+        all_transactions += block.transactions.back().transaction_id_hash;
         transaction.erase(transaction.begin() + transaction_id);        // deleting from transaction pool
     }
 
     block.difficulty_target = difficulty;
 
-    // if(block_header.size() == 0) block.prev_block_hash = "-";
-    // else block.prev_block_hash = block_header.block.back().block_hash;
+    // if(blocknum == 0) block.prev_block_hash = "-";
+    // else block.prev_block_hash = block.block.back().block_hash;
 
     block.timestamp = time(0);
     block.version = "v0.1";
-    block.merkel_root_hash = hashing(merkle_root(block.transactions));
+
+    block.merkel_root_hash = hashing(all_transactions); //hashing(merkle_root(block.transactions));
     block.nonce = nonce;
-    // block.block_hash = hashing(nonce);
+    block.block_hash = hashing(to_string(nonce));
 
     
 
@@ -78,14 +83,14 @@ void print_bc_info(vector<block_header> blockchain){
     for(int i = 1; i <= blockchain.size(); i++){
 
         out << "Block " << i << endl
-        << "---------------------------------................." << endl
-        << "Hash: " << blockchain[i].block_hash << endl
+        << endl
+        << "Hash: " << blockchain.at(i).block_hash << endl
         << "Timestamp: " << /*timestampas*/ endl
-        << "Version: " << blockchain[i].version << endl
-        << "Merkel Root Hash: " << blockchain[i].merkel_root_hash << endl
-        << "Number of transactions: " << blockchain[i].transactions.size() << endl
-        << "Nonce: " << blockchain[i].nonce << endl
-        << "Difficulty: " << blockchain[i].difficulty_target << endl
+        << "Version: " << blockchain.at(i).version << endl
+        << "Merkel Root Hash: " << blockchain.at(i).merkel_root_hash << endl
+        << "Number of transactions: " << blockchain.at(i).transactions.size() << endl
+        << "Nonce: " << blockchain.at(i).nonce << endl
+        << "Difficulty: " << blockchain.at(i).difficulty_target << endl
         << "---------------------------------" << endl << endl;
     }
     

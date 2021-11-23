@@ -49,7 +49,7 @@ class block_header{
 
 
 // class blockchain{
-//     public:
+//     public:,
         
 // }
 
@@ -59,7 +59,7 @@ vector<users> gen_users(int);
 
 vector<transactions> gen_transactions(int, vector<users>);
 
-block_header gen_block(int, int, vector<transactions> &, vector<block_header>);
+block_header gen_block(int, int, vector<transactions> &);
 
 void print_bc_info(vector<block_header>);
 
