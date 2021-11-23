@@ -18,7 +18,7 @@ Programa atitinka keliamus reikalavimus.
 6. Programa kartoja 3-5 žingsnius tol, kol yra laisvų transakcijų.
 
 ### Išvedama informacija
-`
+```
 .
 ..
 ...
@@ -59,7 +59,7 @@ Difficulty: 2
 ...
 ..
 .
-`
+```
 
 ## Programos įdiegimas ir naudojimasis 
 * Atsisiųskite naujausią programos versiją iš [Releases](https://github.com/aurimasruk/Simplified-blockchain/releases) ir ją išarchyvuokite
