@@ -12,9 +12,9 @@ Programa atitinka keliamus reikalavimus.
 3. Iš transakcijų pool'o atsitiktinai pasirenkama 100 transakcijų, kurias įdedame į naują bloką.
 4. Realizuojamas naujų blokų kasimo (angl. mining) Proof-of-Work (PoW) tipo procesas, kurio tikslas yra surasti naujam blokui hash'ą, tenkinantį `Difficulty Targer` reikalavimą.
 5. Suradus tokį naujo bloko hash'ą:
-  * Į naują bloką priskirtas transakcijas ištrinti iš transakcijų pool'o;
-  * "Įvykdyti" transakcijas, t.y., atnaujinti tinklo vartotojų balansus;
-  * naują bloką pridėti prie blockchain grandinės.
+    * Į naują bloką priskirtas transakcijas ištrinti iš transakcijų pool'o;
+    * "Įvykdyti" transakcijas, t.y., atnaujinti tinklo vartotojų balansus;
+    * naują bloką pridėti prie blockchain grandinės.
 6. Programa kartoja 3-5 žingsnius tol, kol yra laisvų transakcijų.
 
 ### Išvedama informacija
