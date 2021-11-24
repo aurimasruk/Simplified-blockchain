@@ -2,9 +2,10 @@
 using namespace std;
 
 
-
-
 int main(){
+
+    ofstream out;
+    out.open("bc_info.txt", fstream::trunc);    //trunc output
 
     //pagrindinis programos veikimas
     
@@ -13,56 +14,35 @@ int main(){
     // // cout << "kuriamos transakcijos" << endl;
     vector<transactions> transakcijos = gen_transactions(10000, vartotojai);
 
-    //tst
-    // cout << vartotojai[110].name << " "
-    // << vartotojai[110].public_key << " "
-    // << vartotojai[110].balance << endl;
-    // --
-    // cout << transakcijos[7777].transaction_id_hash << " "
-    // << transakcijos[7777].sender_public_key << " "
-    // << transakcijos[7777].recipient_public_key << " "
-    // << transakcijos[7777].total << endl;
-
-
-
-
 
 
     // -------------
     vector<block_header> blocks;
-    // vector blockchain;
 
     int difficulty_target = 2;
-    int i = 1;
+    int i = 0;
 
     while(transakcijos.size() > 0){
+        while(true){
+            int diff_0_found = 0;
+            unsigned int numonce = random_num(0, INT_MAX);
+            string numonce_hash = hashing(to_string(numonce));
 
-        unsigned int numonce = random_num(0, INT_MAX);
-        string numonce_hash = hashing(to_string(numonce));
+            for(int j = 0; j < difficulty_target; j++){
+                if(numonce_hash[j] == '0') diff_0_found++;
+            }
 
 
 
+            // cout << "Mining block " << i << endl;
 
-        cout << "Mining block " << i << endl;
+            if(diff_0_found == difficulty_target){
+                blocks.push_back(gen_block(difficulty_target, numonce, transakcijos, i));
+                
+                print_bc_info(blocks, i);
 
-        blocks.push_back(gen_block(difficulty_target, numonce, transakcijos));
-
-        i++;
-
-        if(i > 100){
-        print_bc_info(blocks);}
+                i++;
+            }
+        }
     }
-
-    // cout << blocks.at(3).nonce;
-    
-
-    // cout << "tst" << endl;
-    // print_bc_info(blocks);
-
 }
-
-
-
-
-
-// DO TIMESTAMP, FIX PRINT, DIFFICULTY COMPARISON WITH 0, GIT README

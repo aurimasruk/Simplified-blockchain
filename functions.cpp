@@ -42,7 +42,7 @@ vector<transactions> gen_transactions(int size, vector<users> users){
     return transakcijos;
 }
 
-block_header gen_block(int difficulty, int nonce, vector<transactions> &transaction){
+block_header gen_block(int difficulty, int nonce, vector<transactions> &transaction, int blocknum){
     block_header block;
 
     //for v0.1
@@ -57,8 +57,8 @@ block_header gen_block(int difficulty, int nonce, vector<transactions> &transact
 
     block.difficulty_target = difficulty;
 
-    // if(blocknum == 0) block.prev_block_hash = "-";
-    // else block.prev_block_hash = block.block.back().block_hash;
+    if(blocknum == 0) block.prev_block_hash = "-";
+    else block.prev_block_hash = block.block_hash;
 
     block.timestamp = time(0);
     block.version = "v0.1";
@@ -76,23 +76,30 @@ block_header gen_block(int difficulty, int nonce, vector<transactions> &transact
 
 //--- printing ---
 
-void print_bc_info(vector<block_header> blockchain){
+void print_bc_info(vector<block_header> blockchain, int j){
     ofstream out;
-    out.open("bc_info.txt");
+    out.open("bc_info.txt", fstream::app);
 
-    for(int i = 1; i <= blockchain.size(); i++){
+    auto start = std::chrono::system_clock::now();
+    auto end = std::chrono::system_clock::now();
 
-        out << "Block " << i << endl
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+
+    // for(int i = 1; i <= j; i++){
+
+        out << "Block " << j + 1 << ": " << endl
         << endl
-        << "Hash: " << blockchain.at(i).block_hash << endl
-        << "Timestamp: " << /*timestampas*/ endl
-        << "Version: " << blockchain.at(i).version << endl
-        << "Merkel Root Hash: " << blockchain.at(i).merkel_root_hash << endl
-        << "Number of transactions: " << blockchain.at(i).transactions.size() << endl
-        << "Nonce: " << blockchain.at(i).nonce << endl
-        << "Difficulty: " << blockchain.at(i).difficulty_target << endl
+        << "Hash: " << blockchain.back().block_hash << endl
+        << "Timestamp: " << std::ctime(&end_time)
+        << "Version: " << blockchain.back().version << endl
+        << "Merkel Root Hash: " << blockchain.back().merkel_root_hash << endl
+        << "Number of transactions: " << blockchain.back().transactions.size() << endl
+        << "Nonce: " << blockchain.back().nonce << endl
+        << "Difficulty: " << blockchain.back().difficulty_target << endl
         << "---------------------------------" << endl << endl;
-    }
+    // }
     
     out.close();
 }

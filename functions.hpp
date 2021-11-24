@@ -45,22 +45,14 @@ class block_header{
         string block_hash;      // hash of this block
 };
 
-// BLOCKCHAINO CLASS GALIMA PADARYTI I BLOKU MASYVA, GAL BUTU LABIAU SIMPLE
-
-
-// class blockchain{
-//     public:,
-        
-// }
-
 int random_num(int, int);
 
 vector<users> gen_users(int);
 
 vector<transactions> gen_transactions(int, vector<users>);
 
-block_header gen_block(int, int, vector<transactions> &);
+block_header gen_block(int, int, vector<transactions> &, int);
 
-void print_bc_info(vector<block_header>);
+void print_bc_info(vector<block_header>, int i);
 
 #endif
