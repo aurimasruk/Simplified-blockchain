@@ -2,9 +2,30 @@
 
 int random_num(int x, int y){ return ((rand() % y) + x); }
 
-// string merkle_root(vector<transactions> transaction){
-    
-// }
+string merkle_root(vector<transactions> transactions){
+
+    if(transactions.empty()) throw std::runtime_error("empty transactions");
+
+    vector<string> tr;  // copy of transactions
+
+    for(int i = 0; i < transactions.size(); i++){
+        tr.push_back(transactions[i].transaction_id_hash);
+    }
+
+
+    while(tr.size() > 1){
+        vector<string> temp_tr;
+
+        if(tr.size() % 2 != 0 ){ tr.push_back(tr.back()); };    // if odd num
+
+        for(int i = 0; i < tr.size() / 2; i++){
+            temp_tr.push_back( hashing(tr[i] + tr[i+1]) );      // hashing
+        }
+        tr = temp_tr;
+    }
+
+    return tr[0];
+}
 
 
 vector<users> gen_users(int size){
@@ -45,7 +66,7 @@ vector<transactions> gen_transactions(int size, vector<users> users){
 block_header gen_block(int difficulty, int nonce, vector<transactions> &transaction, int blocknum){
     block_header block;
 
-    //for v0.1
+    //for v0.2
     string all_transactions = "";
 
     for(int i = 0; i < 100; i++){
@@ -61,9 +82,10 @@ block_header gen_block(int difficulty, int nonce, vector<transactions> &transact
     else block.prev_block_hash = block.block_hash;
 
     block.timestamp = time(0);
-    block.version = "v0.1";
+    block.version = "v0.2";
 
-    block.merkel_root_hash = hashing(all_transactions); //hashing(merkle_root(block.transactions));
+    block.merkel_root_hash = //hashing(all_transactions); 
+    hashing(merkle_root(block.transactions));
     block.nonce = nonce;
     block.block_hash = hashing(to_string(nonce));
 
@@ -72,6 +94,29 @@ block_header gen_block(int difficulty, int nonce, vector<transactions> &transact
     return block;
 }
 
+void verify_transactions(vector<transactions> &transakcijos, vector<users> &naudotojai, vector<block_header> &blokai){
+
+    // verifying hash
+
+    for(int i = 0; i < blokai[i].transactions.size(); i++){
+        // i need somehow to find sender and receiver
+
+        
+
+
+        
+    }
+
+
+
+
+    // verifying balance
+
+
+
+
+
+}
 
 
 //--- printing ---

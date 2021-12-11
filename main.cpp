@@ -38,6 +38,7 @@ int main(){
 
             if(diff_0_found == difficulty_target){
                 blocks.push_back(gen_block(difficulty_target, numonce, transakcijos, i));
+                verify_tr(transakcijos, vartotojai, blocks);
                 
                 print_bc_info(blocks, i);
 

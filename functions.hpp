@@ -47,11 +47,15 @@ class block_header{
 
 int random_num(int, int);
 
+string merkle_root(vector<transactions>);
+
 vector<users> gen_users(int);
 
 vector<transactions> gen_transactions(int, vector<users>);
 
 block_header gen_block(int, int, vector<transactions> &, int);
+
+void verify_tr(vector<transactions> &, vector<users> &, vector<block_header> &);
 
 void print_bc_info(vector<block_header>, int i);
 
