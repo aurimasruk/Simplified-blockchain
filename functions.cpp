@@ -16,7 +16,7 @@ string merkle_root(vector<transactions> transactions){
     while(tr.size() > 1){
         vector<string> temp_tr;
 
-        if(tr.size() % 2 != 0 ){ tr.push_back(tr.back()); };    // if odd num
+        if(tr.size() % 2 != 0 ){ tr.push_back(tr.back()); };    // if odd num add last el
 
         for(int i = 0; i < tr.size() / 2; i++){
             temp_tr.push_back( hashing(tr[i] + tr[i+1]) );      // hashing
@@ -41,6 +41,17 @@ vector<users> gen_users(int size){
     return vartotojai;
 }
 
+// finding id for validation
+
+int find_user(vector<users> users, string public_key){
+    for(int i = 0; i < users.size(); i++){
+        if(users.at(i).public_key == public_key){
+            return i;
+        }
+    }
+    return -11;
+};
+
 
 vector<transactions> gen_transactions(int size, vector<users> users){
     vector<transactions> transakcijos;
@@ -60,6 +71,31 @@ vector<transactions> gen_transactions(int size, vector<users> users){
 
         transakcijos.push_back(nauja_transakcija);
     }
+
+    //verifying transaction
+
+    for(int i = 0; i < size; i++){
+
+        int sender_id = find_user(users, transakcijos.at(i).sender_public_key);
+        int receiver_id = find_user(users, transakcijos.at(i).recipient_public_key);
+
+        if(sender_id == -11 || receiver_id == -11)  // error with transaction
+        transakcijos.erase( transakcijos.begin() + i );
+
+        
+        else if(transakcijos.at(i).total <= users[sender_id].balance 
+        || hashing(transakcijos.at(i).sender_public_key + transakcijos.at(i).recipient_public_key + to_string(transakcijos.at(i).total)) == transakcijos.at(i).transaction_id_hash)
+            {
+                users[sender_id].balance -= transakcijos.at(i).total;          // sender 
+                users[receiver_id].balance += transakcijos.at(i).total;          // receiver
+            }
+
+        else transakcijos.erase( transakcijos.begin() + i );
+
+    }
+
+
+
     return transakcijos;
 }
 
@@ -75,6 +111,8 @@ block_header gen_block(int difficulty, int nonce, vector<transactions> &transact
         all_transactions += block.transactions.back().transaction_id_hash;
         transaction.erase(transaction.begin() + transaction_id);        // deleting from transaction pool
     }
+    
+
 
     block.difficulty_target = difficulty;
 
@@ -94,34 +132,39 @@ block_header gen_block(int difficulty, int nonce, vector<transactions> &transact
     return block;
 }
 
-void verify_transactions(vector<transactions> &transakcijos, vector<users> &naudotojai, vector<block_header> &blokai){
+// Igyvendinta transaction generavime
+// void verify_transactions(vector<transactions> &transakcijos, vector<users> &naudotojai, vector<block_header> &blokai){
 
-    // verifying hash
+//     // verifying hash
 
-    for(int i = 0; i < blokai[i].transactions.size(); i++){
-        // i need somehow to find sender and receiver
-
+//     for(int i = 0; i < blokai[i].transactions.size(); i++){
+//         // i need somehow to find sender and receiver
         
+//     }
 
 
-        
-    }
+//     // verifying balance
 
 
+// }
+
+// Igyvendinta main()
+// void mine_block(int difficulty_target, vector<users> &naudotojai, vector<transactions> &transakcijos, block_header &blocks){
+    
+//     int block_num = 5;
+//     vector<block_header> pasirinkti_blokai;
+
+//     // for(int i = 0; i < block_num; i++){
+//     //     pasirinkti_blokai.push_back(gen_block(difficulty_target, ))
+//     // }
 
 
-    // verifying balance
-
-
-
-
-
-}
-
+// }
 
 //--- printing ---
 
 void print_bc_info(vector<block_header> blockchain, int j){
+
     ofstream out;
     out.open("bc_info.txt", fstream::app);
 
@@ -134,6 +177,8 @@ void print_bc_info(vector<block_header> blockchain, int j){
 
     // for(int i = 1; i <= j; i++){
 
+        int i = 0;
+
         out << "Block " << j + 1 << ": " << endl
         << endl
         << "Hash: " << blockchain.back().block_hash << endl
@@ -142,8 +187,30 @@ void print_bc_info(vector<block_header> blockchain, int j){
         << "Merkel Root Hash: " << blockchain.back().merkel_root_hash << endl
         << "Number of transactions: " << blockchain.back().transactions.size() << endl
         << "Nonce: " << blockchain.back().nonce << endl
-        << "Difficulty: " << blockchain.back().difficulty_target << endl
-        << "---------------------------------" << endl << endl;
+        << "Difficulty: " << blockchain.back().difficulty_target << endl << endl
+        << "Block " << j + 1 << " transactions: " << endl;
+
+        // for(int i = 0; i < blockchain.back().transactions.size())
+        // cout << blockchain.at(j).transactions.size();
+
+        // validating transactions
+        // while(blockchain.at(j).transactions.size() >= 0 && i <= blockchain.at(j).transactions.size()){
+            // for(int i = 0; i < ){}
+
+            // if(blockchain.back().transactions.at(i).
+            // && hashing(blockchain.back().transactions.at(i).sender_public_key + blockchain.back().transactions.at(i).recipient_public_key + to_string(blockchain.back().transactions.at(i).total)) )
+            // {
+            //     out << blockchain.back().transactions.at(i).sender_public_key << "  ->  " << blockchain.back().transactions.at(i).recipient_public_key;
+                
+            // }
+
+            for(int i = 0; i < blockchain.at(j).transactions.size(); i++)
+            out << blockchain.at(j).transactions.at(i).sender_public_key << "  -->  " << blockchain.at(j).transactions.at(i).recipient_public_key << endl;
+            
+        //     i++;
+        // };
+
+        out << "---------------------------------" << endl << endl;
     // }
     
     out.close();
